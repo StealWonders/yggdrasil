@@ -1,0 +1,27 @@
+version: "3.8"
+
+secrets:
+  database_username:
+    file: "./.secrets/database_username.secret"
+  database_password:
+    file: "./.secrets/database_password.secret"
+
+services:
+  postgres:
+    image: postgres:14.4-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+    secrets:
+      - "database_username"
+      - "database_password"
+    environment:
+      POSTGRES_DB: yggdrasil
+      POSTGRES_USER_FILE: /run/secrets/database_username
+      POSTGRES_PASSWORD_FILE: /run/secrets/database_password
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  postgres-data: {}
+
